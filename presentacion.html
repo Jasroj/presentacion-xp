@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulación XP - CaféTech | UTN San Carlos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(50px);
+            animation: slideIn 0.8s ease-out forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            border-radius: 3px;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            color: #34495e;
+            margin: 25px 0 15px 0;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+        }
+
+        .team-info {
+            text-align: center;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .practices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .practice-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .practice-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .practice-card h4 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .metrics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .metric-box {
+            text-align: center;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .metric-box:hover {
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .metric-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+
+        .metric-label {
+            color: #6c757d;
+            margin-top: 10px;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: '# Python - TDD Example';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #4a5568;
+            padding: 5px 15px;
+            font-size: 0.8rem;
+            border-radius: 0 10px 0 10px;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            width: 45%;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-right: 10%;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: 10%;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 30px;
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .big-number {
+            font-size: 3rem;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .navigation {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .nav-btn:hover {
+            background: rgba(102, 126, 234, 1);
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .practices-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-content {
+                width: calc(100% - 60px);
+                margin-left: 60px !important;
+                margin-right: 0 !important;
+            }
+            
+            .timeline-item {
+                flex-direction: row !important;
+            }
+            
+            .timeline-dot {
+                left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation">
+        <button class="nav-btn" onclick="scrollToSlide(0)">Inicio</button>
+        <button class="nav-btn" onclick="scrollToSlide(2)">Prácticas</button>
+        <button class="nav-btn" onclick="scrollToSlide(5)">Métricas</button>
+        <button class="nav-btn" onclick="scrollToSlide(8)">Conclusiones</button>
+    </div>
+
+    <div class="presentation-container">
+        <!-- Slide 1: Título -->
+        <div class="slide">
+            <h1>🚀 SIMULACIÓN XP</h1>
+            <div class="subtitle">Sistema de Gestión de Cafetería Universitaria "CaféTech"</div>
+            
+            <div class="team-info">
+                <h3>👥 Equipo de Desarrollo</h3>
+                <p><strong>Cristina Villalobos Mena | Jason Rojas Salas</strong></p>
+                <p>Universidad Técnica Nacional - Sede San Carlos</p>
+                <p>ITI-822: Metodologías Ágiles de Desarrollo de Software</p>
+                <p>Prof. Jose David Carvajal Jimenez | 26 de agosto, 2025</p>
+            </div>
+
+            <div class="highlight-box">
+                <h3>🎯 Aplicación Integral de Extreme Programming</h3>
+                <p>Simulación completa de un equipo XP desarrollando un sistema real con todas las prácticas, valores y principios de la metodología</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Definición del Proyecto -->
+        <div class="slide">
+            <h2>📋 Definición del Proyecto</h2>
+            
+            <h3>🏢 Sistema Web "CaféTech"</h3>
+            <p><strong>Problema identificado:</strong> Largas filas en cafetería universitaria, pérdida de productos perecederos, dificultades de comunicación con estudiantes.</p>
+            
+            <h3>💡 Solución Propuesta</h3>
+            <div class="practices-grid">
+                <div class="practice-card">
+                    <h4>👨‍🎓 Para Estudiantes</h4>
+                    <p>• Consultar menú diario<br>• Hacer pedidos anticipados<br>• Gestionar puntos de fidelidad<br>• Recibir notificaciones</p>
+                </div>
+                <div class="practice-card">
+                    <h4>👨‍💼 Para Administradores</h4>
+                    <p>• Gestión de inventario<br>• Panel administrativo<br>• Reportes de ventas<br>• Control de productos</p>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="big-number">8</span>
+                    <p>Semanas de desarrollo</p>
+                </div>
+                <div class="stat-card">
+                    <span class="big-number">4</span>
+                    <p>Iteraciones (2 sem c/u)</p>
+                </div>
+                <div class="stat-card">
+                    <span class="big-number">320</span>
+                    <p>Horas-persona total</p>
+                </div>
+            </div>
+        </div>
+<div class="slide">
+            <h2>👥 Equipo XP Especializado</h2>
+            
+            <div class="practices-grid">
+                <div class="practice-card" style="background: linear-gradient(135deg, #ff6b6b, #ff8e8e);">
+                    <h4>📋 María González</h4>
+                    <p><strong>Customer/Product Owner</strong><br>
+                    • Definir historias de usuario<br>
+                    • Establecer prioridades<br>
+                    • Validar entregas<br>
+                    • Representar al cliente</p>
+                </div>
+                
+                <div class="practice-card" style="background: linear-gradient(135deg, #4ecdc4, #44a08d);">
+                    <h4>🔧 Carlos Mendoza</h4>
+                    <p><strong>Developer/Coach</strong><br>
+                    • Facilitador XP<br>
+                    • Desarrollo backend<br>
+                    • Mentoreo técnico<br>
+                    • Arquitectura del sistema</p>
+                </div>
+                
+                <div class="practice-card" style="background: linear-gradient(135deg, #a8e6cf, #7fcdcd);">
+                    <h4>🎨 Ana Rodríguez</h4>
+                    <p><strong>Frontend Developer</strong><br>
+                    • Desarrollo frontend<br>
+                    • Diseño UX/UI<br>
+                    • Componentes React<br>
+                    • Experiencia de usuario</p>
+                </div>
+                
+                <div class="practice-card" style="background: linear-gradient(135deg, #ffd93d, #ff6b6b);">
+                    <h4>🧪 Luis Torres</h4>
+                    <p><strong>Developer/Tester</strong><br>
+                    • Desarrollo fullstack<br>
+                    • Testing y QA<br>
+                    • Integración continua<br>
+                    • Automatización</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Prácticas XP Implementadas -->
+        <div class="slide">
+            <h2>⚡ Prácticas XP Implementadas</h2>
+            
+            <div class="practices-grid">
+                <div class="practice-card">
+                    <h4>🔴🟢🔄 Test Driven Development</h4>
+                    <p>• 47 tests unitarios<br>• 89% cobertura de código<br>• Ciclo Red-Green-Refactor<br>• 23 ciclos de refactoring</p>
+                </div>
+                
+                <div class="practice-card">
+                    <h4>👥 Programación en Parejas</h4>
+                    <p>• Rotación sistemática<br>• 67% reducción de bugs<br>• 100% conocimiento compartido<br>• Satisfacción 8.5/10</p>
+                </div>
+                
+                <div class="practice-card">
+                    <h4>🔗 Propiedad Colectiva</h4>
+                    <p>• "Everyone owns everything"<br>• 74% cross-ownership promedio<br>• 0 single points of failure<br>• Modificaciones cruzadas documentadas</p>
+                </div>
+                
+                <div class="practice-card">
+                    <h4>🎯 Diseño Simple (YAGNI)</h4>
+                    <p>• 8 features complejas rechazadas<br>• 280 horas ahorradas<br>• 70% menos líneas de código<br>• Enfoque en valor core</p>
+                </div>
+                
+                <div class="practice-card">
+                    <h4>🎮 Planning Game</h4>
+                    <p>• Business vs Technical risk<br>• Negotiation documentada<br>• 96% accuracy en estimates<br>• 5 scope changes manejados</p>
+                </div>
+                
+                <div class="practice-card">
+                    <h4>🚀 Small Releases</h4>
+                    <p>• 4 iteraciones de 2 semanas<br>• 34 deploys a staging<br>• Demo semanal al cliente<br>• Feedback continuo</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: TDD en Detalle -->
+        <div class="slide">
+            <h2>🔴🟢🔄 Test Driven Development</h2>
+            
+            <h3>Ejemplo Real: Funcionalidad "Agregar producto al carrito"</h3>
+            
+            <div class="code-block">
+# FASE RED - Test que falla
+def test_agregar_producto_al_carrito():
+    carrito = Carrito()
+    producto = Producto("Café Americano", 2500)
+    carrito.agregar(producto, cantidad=2)
+    
+    assert carrito.total_items() == 2
+    assert carrito.total_precio() == 5000
+    assert "Café Americano" in carrito.productos
+
+# Estado: FALLA - Clases no existen
+            </div>
+
+            <div class="metrics-container">
+                <div class="metric-box">
+                    <span class="metric-number">47</span>
+                    <div class="metric-label">Tests Unitarios</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number">89%</span>
+                    <div class="metric-label">Cobertura de Código</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number">23</span>
+                    <div class="metric-label">Ciclos de Refactoring</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number">15min</span>
+                    <div class="metric-label">Tiempo Promedio/Ciclo</div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>🏆 Resultado TDD</h3>
+                <p>Código más robusto, diseño emergente, y confianza total para refactorizar</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Pair Programming -->
+        <div class="slide">
+            <h2>👥 Programación en Parejas</h2>
+            
+            <h3>📅 Calendario de Rotación Sistemática</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Semana 1-2: Establecimiento</h4>
+                        <p><strong>Carlos-Ana:</strong> Sistema de autenticación<br>
+                        <strong>Luis-María:</strong> Catálogo de productos</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Semana 3-4: Desarrollo Intenso</h4>
+                        <p><strong>Ana-Luis:</strong> Carrito de compras<br>
+                        <strong>Carlos-María:</strong> Lógica de negocio</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Semana 5-6: Refinamiento</h4>
+                        <p><strong>Luis-Carlos:</strong> Optimizaciones<br>
+                        <strong>Ana-María:</strong> UX/UI final</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Semana 7-8: Entrega</h4>
+                        <p><strong>Todos juntos:</strong> Integración final<br>
+                        Mob programming sessions</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="big-number">67%</span>
+                    <p>Reducción de bugs</p>
+                </div>
+                <div class="stat-card">
+                    <span class="big-number">40%</span>
+                    <p>Menos tiempo debugging</p>
+                </div>
+                <div class="stat-card">
+                    <span class="big-number">100%</span>
+                    <p>Conocimiento compartido</p>
+                </div>
+                <div class="stat-card">
+                    <span class="big-number">8.5/10</span>
+                    <p>Satisfacción del equipo</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Collective Ownership -->
+        <div class="slide">
+            <h2>🤝 Propiedad Colectiva del Código</h2>
+            
+            <h3>"Everyone Owns Everything" - Evidencias Reales</h3>
+            
+            <div class="practices-grid">
+                <div class="practice-card" style="background: linear-gradient(135deg, #ff6b6b, #ff8e8e);">
+                    <h4>🔧 Ana mejora Backend de Carlos</h4>
+                    <p><strong>Commit:</strong> f8a9d3e<br>
+                    <strong>Optimización:</strong> Queries N+1<br>
+                    <strong>Mejora:</strong> 890ms → 180ms<br>
+                    <strong>Filosofía:</strong> "Fix it when you see it"</p>
+                </div>
+                
+                <div class="practice-card" style="background: linear-gradient(135deg, #4ecdc4, #44a08d);">
+                    <h4>🧪 Luis refactoriza UI de Ana</h4>
+                    <p><strong>Commit:</strong> a2b7c4d<br>
+                    <strong>Mejora:</strong> Componente reutilizable<br>
+                    <strong>Resultado:</strong> DRY principle aplicado<br>
+                    <strong>Impacto:</strong> 59 líneas eliminadas</p>
+                </div>
+            </div>
+
+            <h3>📊 Métricas de Cross-Ownership</h3>
+            <div class="metrics-container">
+                <div class="metric-box">
+                    <span class="metric-number">74%</span>
+                    <div class="metric-label">Carlos - Cross-ownership promedio</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number">68%</span>
+                    <div class="metric-label">Ana - Módulos de otros modificados</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number">83%</span>
+                    <div class="metric-label">María - Ownership distribuido</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number">0</span>
+                    <div class="metric-label">Single points of failure</div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>🚨 Crisis Management</h3>
+                <p><strong>Carlos enfermo 2 días:</strong> Ana y Luis continuaron backend sin interrupciones<br>
+                <strong>Bug crítico viernes 5PM:</strong> Resuelto en 1 hora por todo el equipo colaborando</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Métricas de Performance -->
+        <div class="slide">
+            <h2>📈 Métricas de Rendimiento</h2>
+            
+            <h3>⚡ Optimizaciones de Performance</h3>
+            <div class="metrics-container">
+                <div class="metric-box">
+                    <span class="metric-number" style="color: #e74c3c;">890ms→245ms</span>
+                    <div class="metric-label">GET /api/menu (72.5% mejora)</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number" style="color: #27ae60;">340ms→180ms</span>
+                    <div class="metric-label">POST /api/cart/add (47.1% mejora)</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number" style="color: #3498db;">1200ms→450ms</span>
+                    <div class="metric-label">POST /api/orders (62.5% mejora)</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number" style="color: #9b59b6;">87.3%</span>
+                    <div class="metric-label">Cache Hit Ratio (Redis)</div>
+                </div>
+            </div>
+
+            <h3>🎯 Métricas de Calidad XP</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="big-number">96%</span>
+                    <p>Velocity Accuracy</p>
+                </div>
+                <div class="stat-card">
+                    <span class="big-number">200</span>
+                    <p>Usuarios Concurrentes</p>
+                </div>
+                <div class="stat-card">
+                    <span class="big-number">0.02%</span>
+                    <p>Error Rate</p>
+                </div>
+                <div class="stat-card">
+                    <span class="big-number">98.6%</span>
+                    <p>Build Success Rate</p>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>🏆 Integración Continua</h3>
+                <p><strong>287 commits, 283 builds exitosos, 34 deploys automáticos</strong><br>
+                Pipeline automatizado con tests, coverage y deployment</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Lecciones Aprendidas -->
+        <div class="slide">
+            <h2>🎓 Lecciones Aprendidas y Reflexiones</h2>
+            
+            <h3>✅ Lo que Funcionó Excepcionalmente</h3>
+            <div class="practices-grid">
+                <div class="practice-card" style="background: linear-gradient(135deg, #2ecc71, #27ae60);">
+                    <h4>🎯 Planning Game</h4>
+                    <p>Estimaciones 96% precisas, scope control efectivo, cliente satisfecho con transparencia total del proceso</p>
+                </div>
+                
+                <div class="practice-card" style="background: linear-gradient(135deg, #3498db, #2980b9);">
+                    <h4>🔄 TDD + Refactoring</h4>
+                    <p>Confianza total para cambios, diseño emergente natural, calidad mantenida bajo presión</p>
+                </div>
+            </div>
+
+            <h3>💡 Insights Clave</h3>
+            <div class="highlight-box" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                <h3>🧠 Conocimiento Profundo Adquirido</h3>
+                <p><strong>"XP no es solo metodología, es cultura de excelencia técnica"</strong><br>
+                La combinación de prácticas técnicas + valores humanos genera resultados excepcionales</p>
+            </div>
+
+            <h3>📊 Impacto Cuantificado</h3>
+            <div class="metrics-container">
+                <div class="metric-box">
+                    <span class="metric-number" style="color: #e74c3c;">93%</span>
+                    <div class="metric-label">Stories Completadas (28/30)</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number" style="color: #27ae60;">9.2/10</span>
+                    <div class="metric-label">Satisfacción del Cliente</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number" style="color: #3498db;">280h</span>
+                    <div class="metric-label">Tiempo Ahorrado (YAGNI)</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number" style="color: #9b59b6;">100%</span>
+                    <div class="metric-label">Equipo Conoce Todo el Código</div>
+                </div>
+            </div>
+        </div>
+        <div class="slide">
+            <h2>💻 Demostración de Código Real</h2>
+            
+            <h3>🛒 Módulo Carrito - Implementación Final</h3>
+            
+            <div class="code-block">
+class Carrito:
+    """Maneja el carrito de compras con cálculos automáticos."""
+    
+    def __init__(self, usuario: 'Usuario'):
+        self.usuario = usuario
+        self.items: List[CarritoItem] = []
+        self.fecha_creacion = datetime.now()
+        
+    def agregar_producto(self, producto: 'Producto', cantidad: int = 1):
+        """Agrega un producto al carrito o incrementa cantidad existente."""
+        if not producto.tiene_stock(cantidad):
+            raise ValueError(f"Stock insuficiente para {producto.nombre}")
+            
+        # Buscar si el producto ya existe
+        for item in self.items:
+            if item.producto.id == producto.id:
+                nueva_cantidad = item.cantidad + cantidad
+                if producto.tiene_stock(nueva_cantidad):
+                    item.cantidad = nueva_cantidad
+                    item.subtotal = item.precio_unitario * nueva_cantidad
+                    self._recalcular_descuentos()
+                    return
+        
+        # Crear nuevo item si no existe
+        nuevo_item = CarritoItem(producto, cantidad)
+        self.items.append(nuevo_item)
+        self._recalcular_descuentos()
+            </div>
+
+            <div class="practices-grid">
+                <div class="practice-card">
+                    <h4>🧪 Test Coverage</h4>
+                    <p><strong>156 tests unitarios</strong><br>
+                    95% cobertura de código<br>
+                    Tests de integración incluidos<br>
+                    Casos edge documentados</p>
+                </div>
+                
+                <div class="practice-card">
+                    <h4>📐 Arquitectura Simple</h4>
+                    <p><strong>23 clases totales</strong><br>
+                    2,847 líneas de código<br>
+                    Complejidad promedio: 3.1<br>
+                    Principio YAGNI aplicado</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Planning Game en Detalle -->
+        <div class="slide">
+            <h2>🎮 Planning Game - Business vs Technical</h2>
+            
+            <h3>💼 Negotiation Session Real</h3>
+            <div class="highlight-box" style="background: linear-gradient(135deg, #34495e, #2c3e50); color: white;">
+                <p><strong>María (Cliente):</strong> "Necesitamos que los estudiantes puedan hacer pedidos desde el primer día."<br><br>
+                <strong>Carlos (Dev):</strong> "Pedidos implica autenticación, catálogo, carrito, pagos, inventario... Son 6 sistemas complejos."<br><br>
+                <strong>Ana:</strong> "Si simplificamos a solo reservas (sin pagos online), podríamos tener algo en 4 semanas."</p>
+            </div>
+
+            <h3>⚖️ Trade-offs Documentados</h3>
+            <div class="practices-grid">
+                <div class="practice-card" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                    <h4>❌ RECHAZADO: Pagos Online</h4>
+                    <p><strong>Cliente quería:</strong> Stripe, PayPal, SINPE<br>
+                    <strong>Estimación:</strong> 6 semanas solo pagos<br>
+                    <strong>Decisión:</strong> Reservas + pago efectivo<br>
+                    <strong>Tiempo ahorrado:</strong> 40 horas</p>
+                </div>
+                
+                <div class="practice-card" style="background: linear-gradient(135deg, #27ae60, #229954);">
+                    <h4>✅ ACEPTADO: Sistema Core</h4>
+                    <p><strong>Enfoque:</strong> Autenticación + Menú + Carrito<br>
+                    <strong>Valor real:</strong> Eliminar filas en cafetería<br>
+                    <strong>Resultado:</strong> MVP funcional en 6 semanas<br>
+                    <strong>ROI:</strong> 100% features core completas</p>
+                </div>
+            </div>
+
+            <div class="metrics-container">
+                <div class="metric-box">
+                    <span class="metric-number">28/30</span>
+                    <div class="metric-label">Stories Completadas</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number">5/5</span>
+                    <div class="metric-label">Scope Changes Manejados</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number">96%</span>
+                    <div class="metric-label">Velocity Accuracy</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number">9.2/10</span>
+                    <div class="metric-label">Cliente Satisfaction</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Small Releases Timeline -->
+        <div class="slide">
+            <h2>🚀 Small Releases - Entregas Continuas</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>📦 RELEASE 1.0 (Semanas 1-2): Fundación</h4>
+                        <p><strong>Entregables:</strong> Autenticación + Base de datos + UI básica<br>
+                        <strong>Velocity:</strong> 13/13 story points<br>
+                        <strong>Demo resultado:</strong> "Excelente base técnica" - María<br>
+                        <strong>Bugs encontrados:</strong> 7 (todos corregidos)</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>🛒 RELEASE 1.1 (Semanas 3-4): Experiencia de Compra</h4>
+                        <p><strong>Entregables:</strong> Menú completo + Carrito + Sistema de reservas<br>
+                        <strong>Velocity:</strong> 21/21 story points<br>
+                        <strong>Demo resultado:</strong> "¡Impresionante! Ya puedo hacer un pedido completo"<br>
+                        <strong>Desafío:</strong> Concurrencia en inventario (solucionado)</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>💎 RELEASE 1.2 (Semanas 5-6): Fidelización</h4>
+                        <p><strong>Entregables:</strong> Sistema de puntos + Panel admin + Gestión productos<br>
+                        <strong>Velocity:</strong> 29/29 story points<br>
+                        <strong>Nuevas funcionalidades:</strong> Descuentos por volumen, alertas stock<br>
+                        <strong>Tests totales:</strong> 127 tests unitarios</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>🏁 RELEASE 1.3 (Semanas 7-8): Optimización</h4>
+                        <p><strong>Entregables:</strong> Sistema completo + Performance optimizada<br>
+                        <strong>Velocity:</strong> 34/34 story points<br>
+                        <strong>Performance:</strong> <500ms tiempo de respuesta<br>
+                        <strong>Final:</strong> 156 tests, 95% cobertura, sistema production-ready</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Comparación XP vs Otras Metodologías -->
+        <div class="slide">
+            <h2>⚔️ XP vs Otras Metodologías</h2>
+            
+            <h3>🎯 Diferenciadores Clave de XP</h3>
+            
+            <div class="practices-grid">
+                <div class="practice-card" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                    <h4>🔧 XP - Enfoque Técnico</h4>
+                    <p><strong>Énfasis:</strong> Calidad del código<br>
+                    <strong>Prácticas:</strong> TDD, Pair Programming, Refactoring<br>
+                    <strong>Filosofía:</strong> "Code quality is non-negotiable"<br>
+                    <strong>Resultado:</strong> Software técnicamente excelente</p>
+                </div>
+                
+                <div class="practice-card" style="background: linear-gradient(135deg, #fd79a8, #fdcb6e);">
+                    <h4>📊 SCRUM - Enfoque Gestión</h4>
+                    <p><strong>Énfasis:</strong> Proceso y ceremonias<br>
+                    <strong>Prácticas:</strong> Sprints, Retrospectives, Backlog<br>
+                    <strong>Filosofía:</strong> "Process drives success"<br>
+                    <strong>Resultado:</strong> Gestión de proyecto efectiva</p>
+                </div>
+                
+                <div class="practice-card" style="background: linear-gradient(135deg, #00cec9, #6c5ce7);">
+                    <h4>📈 KANBAN - Enfoque Flujo</h4>
+                    <p><strong>Énfasis:</strong> Visualización y flujo<br>
+                    <strong>Prácticas:</strong> WIP limits, Board visual<br>
+                    <strong>Filosofía:</strong> "Optimize the flow"<br>
+                    <strong>Resultado:</strong> Eficiencia operacional</p>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>🏆 Por qué Elegimos XP</h3>
+                <p><strong>"XP era perfecto para nuestro contexto:"</strong><br>
+                Equipo pequeño (4 personas), requerimientos cambiantes, cliente involucrado, necesidad de alta calidad técnica</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="big-number">89%</span>
+                    <p>Cobertura Tests vs 60% industry</p>
+                </div>
+                <div class="stat-card">
+                    <span class="big-number">67%</span>
+                    <p>Menos bugs vs desarrollo tradicional</p>
+                </div>
+                <div class="stat-card">
+                    <span class="big-number">0</span>
+                    <p>Días de retraso por dependencies</p>
+                </div>
+                <div class="stat-card">
+                    <span class="big-number">100%</span>
+                    <p>Features core completadas</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Arquitectura y Decisiones Técnicas -->
+        <div class="slide">
+            <h2>🏗️ Arquitectura y Decisiones Técnicas</h2>
+            
+            <h3>📋 Architecture Decision Records (ADRs)</h3>
+            
+            <div class="practices-grid">
+                <div class="practice-card">
+                    <h4>🗄️ PostgreSQL como DB Principal</h4>
+                    <p><strong>Contexto:</strong> Necesidad ACID para inventario<br>
+                    <strong>Decisión:</strong> PostgreSQL vs MySQL/SQLite<br>
+                    <strong>Razón:</strong> Transacciones robustas + Performance<br>
+                    <strong>Resultado:</strong> 0 inconsistencias de datos</p>
+                </div>
+                
+                <div class="practice-card">
+                    <h4>⚡ Redis para Caching</h4>
+                    <p><strong>Contexto:</strong> Consultas de menú repetitivas<br>
+                    <strong>Decisión:</strong> Redis como cache layer<br>
+                    <strong>Razón:</strong> Reducir latencia <500ms<br>
+                    <strong>Resultado:</strong> 87
+                 <strong>Resultado:</strong> 87.3% hit ratio, 72% mejora performance</p>
+                </div>
+                
+                <div class="practice-card">
+                    <h4>🏢 Monolito vs Microservicios</h4>
+                    <p><strong>Contexto:</strong> Equipo pequeño, MVP rápido<br>
+                    <strong>Decisión:</strong> Monolito modular<br>
+                    <strong>Razón:</strong> Simplicidad + Deploy fácil<br>
+                    <strong>Resultado:</strong> 4min deploy time, debugging simple</p>
+                </div>
+                
+                <div class="practice-card">
+                    <h4>🔐 JWT para Autenticación</h4>
+                    <p><strong>Contexto:</strong> Autenticación stateless<br>
+                    <strong>Decisión:</strong> JWT vs OAuth complejo<br>
+                    <strong>Razón:</strong> Sistema interno, simplicidad<br>
+                    <strong>Resultado:</strong> Auth robusta sin over-engineering</p>
+                </div>
+            </div>
+
+            <div class="metrics-container">
+                <div class="metric-box">
+                    <span class="metric-number">2,847</span>
+                    <div class="metric-label">Líneas de Código (vs 5,000 estimadas)</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number">23</span>
+                    <div class="metric-label">Clases Totales (Simple Design)</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number">8</span>
+                    <div class="metric-label">Dependencias Externas Únicamente</div>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number">15min</span>
+                    <div class="metric-label">Setup Time para Nuevos Devs</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Conclusiones y Reflexiones Finales -->
+        <div class="slide">
+            <h2>🎯 Conclusiones y Valor Académico</h2>
+            
+            <h3>🧠 Aprendizajes Transformadores</h3>
+            <div class="highlight-box">
+                <h3>💡 Insight Principal</h3>
+                <p><strong>"XP no es solo una metodología, es una filosofía de excelencia técnica"</strong><br>
+                La combinación de prácticas técnicas disciplinadas + valores humanos genera resultados que superan la suma de sus partes</p>
+            </div>
+
+            <div class="practices-grid">
+                <div class="practice-card" style="background: linear-gradient(135deg, #2ecc71, #27ae60);">
+                    <h4>🎯 Valor para la Formación</h4>
+                    <p><strong>Técnico:</strong> TDD, Refactoring, CI/CD reales<br>
+                    <strong>Profesional:</strong> Trabajo en equipo, comunicación<br>
+                    <strong>Personal:</strong> Disciplina, calidad, respeto<br>
+                    <strong>Académico:</strong> Aplicación práctica de teoría</p>
+                </div>
+                
+                <div class="practice-card" style="background: linear-gradient(135deg, #3498db, #2980b9);">
+                    <h4>🚀 Preparación Profesional</h4>
+                    <p><strong>Herramientas:</strong> Git, CI/CD, Testing frameworks<br>
+                    <strong>Prácticas:</strong> Code reviews, pair programming<br>
+                    <strong>Mentalidad:</strong> Quality-first, continuous improvement<br>
+                    <strong>Liderazgo:</strong> Technical mentoring, collaboration</p>
+                </div>
+            </div>
+
+            <h3>📈 Impacto Medible del Proyecto</h3>
+            <div class="stats-grid">
+                <div class="stat-card" style="background: linear-gradient(135deg, #ff6b6b, #ff8e8e);">
+                    <span class="big-number">93%</span>
+                    <p>Cumplimiento de Objetivos</p>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #4ecdc4, #44a08d);">
+                    <span class="big-number">320h</span>
+                    <p>Horas de Aprendizaje Intensivo</p>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #a8e6cf, #7fcdcd);">
+                    <span class="big-number">13</span>
+                    <p>Prácticas XP Dominadas</p>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #ffd93d, #ff6b6b);">
+                    <span class="big-number">100%</span>
+                    <p>Equipo Satisfecho</p>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                <h3>🏆 Mensaje Final</h3>
+                <p><strong>"Este proyecto nos transformó de estudiantes a desarrolladores profesionales"</strong><br><br>
+                Gracias por la oportunidad de explorar XP en profundidad. Hemos ganado no solo conocimiento técnico, sino una nueva forma de pensar sobre la calidad, la colaboración y la excelencia en desarrollo de software.</p>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="window.print()">📄 Imprimir Presentación</button>
+                <button class="btn btn-primary" onclick="scrollToSlide(0)">🔄 Volver al Inicio</button>
+            </div>
+        </div>
+
+        <!-- Slide 16: Preguntas y Agradecimientos -->
+        <div class="slide">
+            <h2>❓ Preguntas y Agradecimientos</h2>
+            
+            <div style="text-align: center; margin: 60px 0;">
+                <h1 style="font-size: 4rem; margin-bottom: 30px;">🙏</h1>
+                <h3 style="font-size: 2.5rem; margin-bottom: 20px;">¡Gracias!</h3>
+                <p style="font-size: 1.5rem; color: #7f8c8d;">¿Preguntas sobre nuestra simulación XP?</p>
+            </div>
+
+            <div class="practices-grid">
+                <div class="practice-card" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                    <h4>👨‍🎓 Cristina Villalobos Mena</h4>
+                    <p>Product Owner & Business Analyst<br>
+                    Especialista en requirements y validación<br>
+                    Experiencia en Planning Game y stakeholder management</p>
+                </div>
+                
+                <div class="practice-card" style="background: linear-gradient(135deg, #4ecdc4, #44a08d);">
+                    <h4>👨‍💻 Jason Rojas Salas</h4>
+                    <p>Technical Lead & Full-Stack Developer<br>
+                    Experto en TDD, arquitectura y mentoring<br>
+                    Especialista en prácticas XP avanzadas</p>
+                </div>
+            </div>
+
+            <div class="team-info">
+                <h3>🏛️ Universidad Técnica Nacional</h3>
+                <p><strong>Sede San Carlos</strong></p>
+                <p>ITI-822: Metodologías Ágiles de Desarrollo de Software</p>
+                <p>Profesor: Jose David Carvajal Jimenez</p>
+                <p>26 de agosto, 2025</p>
+            </div>
+
+            <div class="highlight-box" style="background: linear-gradient(135deg, #2ecc71, #27ae60); color: white;">
+                <h3>🎯 Ready for Q&A</h3>
+                <p>Estamos preparados para profundizar en cualquier aspecto de nuestra implementación XP:<br>
+                Prácticas técnicas, métricas, decisiones de arquitectura, lecciones aprendidas, y más.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function scrollToSlide(index) {
+            const slides = document.querySelectorAll('.slide');
+            if (slides[index]) {
+                slides[index].scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        // Auto-scroll on load
+        window.addEventListener('load', function() {
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach((slide, index) => {
+                slide.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const slideObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.slide').forEach(slide => {
+            slideObserver.observe(slide);
+        });
+
+        // Add some interactivity to practice cards
+        document.querySelectorAll('.practice-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = this.style.transform === 'scale(1.05)' ? 'scale(1)' : 'scale(1.05)';
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowDown') {
+                window.scrollBy(0, window.innerHeight);
+            } else if (e.key === 'ArrowUp') {
+                window.scrollBy(0, -window.innerHeight);
+            }
+        });
+
+        // Additional animations for enhanced interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add pulse animation to metric numbers
+            const metricNumbers = document.querySelectorAll('.metric-number, .big-number');
+            metricNumbers.forEach(number => {
+                number.addEventListener('mouseenter', function() {
+                    this.style.animation = 'pulse 0.6s ease-in-out';
+                });
+                
+                number.addEventListener('animationend', function() {
+                    this.style.animation = '';
+                });
+            });
+
+            // Add smooth color transition to buttons
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transition = 'all 0.3s ease';
+                });
+            });
+
+            // Add typing effect to code blocks (optional enhancement)
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                block.addEventListener('click', function() {
+                    this.style.backgroundColor = '#1a202c';
+                    setTimeout(() => {
+                        this.style.backgroundColor = '#2d3748';
+                    }, 200);
+                });
+            });
+
+            // Add slide counter
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach((slide, index) => {
+                const counter = document.createElement('div');
+                counter.textContent = `${index + 1}/${slides.length}`;
+                counter.style.cssText = `
+                    position: absolute;
+                    top: 20px;
+                    left: 20px;
+                    background: rgba(102, 126, 234, 0.1);
+                    padding: 5px 15px;
+                    border-radius: 20px;
+                    font-size: 0.9rem;
+                    color: #667eea;
+                    font-weight: 600;
+                `;
+                slide.appendChild(counter);
+            });
+        });
+
+        // Add CSS animation keyframes dynamically
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+                100% { transform: scale(1); }
+            }
+
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .practice-card:active {
+                transform: translateY(-5px) scale(0.98);
+            }
+
+            .metric-box:hover .metric-number {
+                color: #ff6b6b;
+                transition: color 0.3s ease;
+            }
+
+            .timeline-dot:hover {
+                transform: translateX(-50%) scale(1.2);
+                transition: transform 0.3s ease;
+            }
+
+            @media print {
+                .navigation {
+                    display: none;
+                }
+                
+                .slide {
+                    page-break-after: always;
+                    margin-bottom: 0;
+                    animation: none;
+                    opacity: 1;
+                    transform: none;
+                }
+                
+                body {
+                    background: white;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>   
+        <!-- Continúa con más slides... -->
+        <!-- Para mantener el código manejable, aquí incluyo solo las primeras slides -->
+        <!-- El código completo incluye todas las 16 slides -->
+
+        <!-- Script de JavaScript -->
+        <script>
+            function scrollToSlide(index) {
+                const slides = document.querySelectorAll('.slide');
+                if (slides[index]) {
+                    slides[index].scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }
+
+            // Auto-scroll on load
+            window.addEventListener('load', function() {
+                const slides = document.querySelectorAll('.slide');
+                slides.forEach((slide, index) => {
+                    slide.style.animationDelay = `${index * 0.1}s`;
+                });
+            });
+
+           
+
+            document.querySelectorAll('.slide').forEach(slide => {
+                slideObserver.observe(slide);
+            });
+
+            // Add interactivity to practice cards
+            document.querySelectorAll('.practice-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = this.style.transform === 'scale(1.05)' ? 'scale(1)' : 'scale(1.05)';
+                });
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowDown') {
+                    window.scrollBy(0, window.innerHeight);
+                } else if (e.key === 'ArrowUp') {
+                    window.scrollBy(0, -window.innerHeight);
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>
